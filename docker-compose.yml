@@ -1,0 +1,53 @@
+version: "3.4"
+services:
+  postgres:
+    image: postgres:11-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+      - ./docker/postgres.sql:/docker-entrypoint-initdb.d/init-db.sql
+    ports:
+      - "5432:5432"
+
+  pubsub:
+    image: bigtruedata/gcloud-pubsub-emulator
+    command: start --host-port 0.0.0.0:8538
+
+  redis:
+    image: redis:alpine
+
+  proxy:
+    build: ./localSetup/projects/proxy
+    command: ["nginx", "-g", "daemon off;"]
+    entrypoint: ["/docker-entrypoint.sh"]
+    volumes:
+      - ./localSetup/projects/proxy/proxy.nginx.d:/etc/nginx/conf.d:ro
+      - ./localSetup/projects/proxy/entrypoint.sh:/docker-entrypoint.sh
+      - ./data/proxy/ca:/etc/ca
+      - ./data/proxy/certs:/etc/ssl/private
+    ports:
+      - "80:80"
+      - "443:443"
+
+  api:
+    build:
+      context: ./sourcecode/api
+      dockerfile: Dockerfile
+      target: dev
+    env_file:
+      - ./app.env
+    environment:
+      LOG_REQUESTS: "0"
+      PUBSUB_EMULATOR_HOST: pubsub:8538
+      REDIS_URL: redis://redis
+    volumes:
+      - ./sourcecode/api/src:/app/src
+      - ./data/api/node_modules:/app/node_modules
+      - ./data/api/emails:/app/emails
+      - ./sourcecode/api/package.json:/app/package.json
+      - ./sourcecode/api/yarn.lock:/app/yarn.lock
+      - ./sourcecode/api/.env.defaults:/app/.env.defaults
+      - ./sourcecode/api/tsconfig.json:/app/tsconfig.json
+      - ./sourcecode/api/tslint.json:/app/tslint.json
