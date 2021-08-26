@@ -51,3 +51,24 @@ services:
       - ./sourcecode/api/.env.defaults:/app/.env.defaults
       - ./sourcecode/api/tsconfig.json:/app/tsconfig.json
       - ./sourcecode/api/tslint.json:/app/tslint.json
+
+  frontend:
+    build:
+      context: ./sourcecode/frontend
+      dockerfile: Dockerfile
+      target: dev
+    env_file:
+      - ./app.env
+    environment:
+      CLIENT_PUBLIC_PATH: https://frontend.local.kaalrota.no/
+      PUBLIC_PATH: https://frontend.local.kaalrota.no/
+    volumes:
+      - ./data/frontend/node_modules:/app/node_modules
+      - ./sourcecode/frontend/public:/app/public
+      - ./sourcecode/frontend/src:/app/src
+      - ./sourcecode/frontend/build-config:/app/build-config
+      - ./sourcecode/frontend/razzle.config.js:/app/razzle.config.js
+      - ./sourcecode/frontend/.babelrc:/app/.babelrc
+      - ./sourcecode/frontend/.eslintrc.json:/app/.eslintrc.json
+      - ./sourcecode/frontend/package.json:/app/package.json
+      - ./sourcecode/frontend/yarn.lock:/app/yarn.lock

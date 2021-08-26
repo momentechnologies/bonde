@@ -6,6 +6,7 @@ CERTS_DIR=/etc/ssl/private
 
 DOMAINS="\
 DNS:api.local.kaalrota.no, \
+DNS:frontend.local.kaalrota.no, \
 DNS:local.kaalrota.no \
 "
 

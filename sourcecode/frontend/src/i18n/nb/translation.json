@@ -1,0 +1,13 @@
+{
+    "stripeErrors": {
+        "payment_intent_authentication_failure": "Vi kan ikke authentisere din betaling. Vennligst prøv et annet kort.",
+        "card_declined": "Kortet ditt ble avslått. Vennligst prøv et annet kort.",
+        "incomplete_number": "Du må fullføre registrering av ditt kort",
+        "incomplete_expiry": "Du må fullføre registrering av ditt kort"
+    },
+    "stripeDeclineCodes": {
+        "insufficient_funds": "Kortet har ikke dekning. Vennligst prøv et annet kort.",
+        "lost_card": "Kortet ditt ble avslått. Vennligst prøv et annet kort.",
+        "incorrect_number": "Kortnummer er feil."
+    }
+}
