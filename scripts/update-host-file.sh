@@ -7,6 +7,8 @@ ip=${1:-$default_ip}
 
 read -r -d '' hosts << EOM
 $ip\tapi.local.kaalrota.no
+$ip\tcdn.local.kaalrota.no
+$ip\tcdn-private.local.kaalrota.no
 $ip\tfrontend.local.kaalrota.no
 $ip\tlocal.kaalrota.no
 EOM
